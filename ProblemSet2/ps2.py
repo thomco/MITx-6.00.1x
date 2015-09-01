@@ -1,39 +1,37 @@
 import sys
+MONTHS = 12
 
-def ps2p1(balance, annualInterestRate, monthlyPaymentRate):
-    MONTHS = 12
+def printMonthlyStatement(month, payment, balance):
+    print 'Month {0}'.format(month)
+    print 'Minimum monthly payment: {0:.2f}'.format(payment)
+    print 'Remaining balance: {0:.2f}'.format(balance)
 
-    def printMonthlyStatement(month, payment, balance):
-        print 'Month {0}'.format(month)
-        print 'Minimum monthly payment: {0:.2f}'.format(payment)
-        print 'Remaining balance: {0:.2f}'.format(balance)
+def printAnnualStatement(payment, balance):
+    print 'Total paid: {0:.2f}'.format(payment)
+    print 'Remaining balance: {0:.2f}'.format(balance)
 
-    def printAnnualStatement(payment, balance):
-        print 'Total paid: {0:.2f}'.format(payment)
-        print 'Remaining balance: {0:.2f}'.format(balance)
+def computeAnnual(balance, annualInterestRate, monthlyPayment=0, monthlyPaymentRate=0.2):
 
-
-    remainingBalance = balance
     totalPaid = 0
-    for month in range(1, MONTHS+1):
-        minimumMonthlyPayment = remainingBalance * monthlyPaymentRate
-        unpaidBalance = remainingBalance - minimumMonthlyPayment
-        remainingBalance = unpaidBalance * (annualInterestRate / 12.0) + unpaidBalance
-        printMonthlyStatement(month, minimumMonthlyPayment, remainingBalance)
-        totalPaid += minimumMonthlyPayment
-
-    printAnnualStatement(totalPaid, remainingBalance)
-    return (totalPaid, remainingBalance)
-
-def computeAnnual(balance, annualInterestRate, monthlyPayment):
-    MONTHS = 12
-
     remainingBalance = balance
-    for month in range(1, MONTHS+1):
+    for month in range(MONTHS):
         unpaidBalance = remainingBalance - monthlyPayment
         remainingBalance = unpaidBalance * (annualInterestRate / 12.0) + unpaidBalance
 
     return remainingBalance
+
+def ps2p1(balance, annualInterestRate, monthlyPaymentRate):
+    remainingBalance = balance
+    totalPaid = 0
+    for month in range(MONTHS):
+        minimumMonthlyPayment = remainingBalance * monthlyPaymentRate
+        unpaidBalance = remainingBalance - minimumMonthlyPayment
+        remainingBalance = unpaidBalance * (annualInterestRate / 12.0) + unpaidBalance
+        printMonthlyStatement(month+1, minimumMonthlyPayment, remainingBalance)
+        totalPaid += minimumMonthlyPayment
+
+    printAnnualStatement(totalPaid, remainingBalance)
+    return (totalPaid, remainingBalance)
 
 def ps2p2(balance, annualInterestRate):
     lowestPayment = int(balance / 120 + .5) * 10
@@ -61,14 +59,11 @@ def ps2p3(balance, annualInterestRate):
             upperBound = guess
         guess = (lowerBound + upperBound) / 2
         remainingBalance = computeAnnual(balance, annualInterestRate, guess)
+    print 'Lowest Payment: {0:.2f}'.format(guess)
     return guess
 
 def main():
-    balance = 120
-    annualInterestRate = 0
-    lowestPayment = ps2p3(balance, annualInterestRate)
-    print 'Lowest Payment: {0:.2f}'.format(lowestPayment)
-
+    pass
 
 if __name__ == "__main__":
     sys.exit(int(main() or 0))
