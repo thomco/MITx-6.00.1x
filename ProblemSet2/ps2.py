@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 MONTHS = 12
 
 def printMonthlyStatement(month, payment, balance):
@@ -49,16 +49,17 @@ def ps2p3(balance, annualInterestRate):
     upperBound = balance * (1+annualInterestRate/12.0)**12 / 12.0
     epsilon = 0.005
 
-    guess = (lowerBound + upperBound) / 2
-    remainingBalance = computeAnnual(balance, annualInterestRate, guess)
-
-    while abs(remainingBalance) > epsilon:
+    while True:
+        guess = (lowerBound + upperBound) / 2
+        remainingBalance = computeAnnual(balance, annualInterestRate, guess)
+              
+        if abs(remainingBalance) < epsilon:
+            break
+        
         if remainingBalance > 0:
             lowerBound = guess
         else:
             upperBound = guess
-        guess = (lowerBound + upperBound) / 2
-        remainingBalance = computeAnnual(balance, annualInterestRate, guess)
     print 'Lowest Payment: {0:.2f}'.format(guess)
     return guess
 
